@@ -1,0 +1,35 @@
+@startuml bounded-contexts
+!include <C4/C4_Context>
+
+LAYOUT_WITH_LEGEND()
+
+System_Boundary(system_boundary, "System Boundary") {
+    System(order, "Ordering Context", "Provides ordering business capabilities")
+    System(payment, "Payment Context", "Provides payment business capabilities")
+    System(product, "Product Context", "Provides product business capabilities")
+    System(shipping, "Shipping Context", "Provides shipping business capabilities")
+    System(customer, "Customer Context", "Provides customer business capabilities")
+}
+
+System(analytics, "Analytics Context", "Provides analytics on business capabilities")
+
+System_Ext(payment_processor, "Payment Processor", "External payment processing service")
+
+System_Ext(shipping_carrier, "Shipping Carrier", "External shipping carrier service")
+
+System_Ext(idp, "Identity Provider", "External identity provider service")
+
+System_Ext(notification_service, "Notification Service", "External notification service")
+
+Rel(customer, product, "")
+Rel(customer, idp, "")
+Rel(product, order, "")
+Rel_L(order, payment, "")
+Rel_R(payment, payment_processor, "")
+Rel(order, shipping, "")
+Rel_L(shipping, shipping_carrier, "")
+Rel(analytics, system_boundary, "Observes contexts")
+Rel_D(order, notification_service, "")
+Rel_D(shipping, notification_service, "")
+Rel_D(payment, notification_service, "")
+@enduml
